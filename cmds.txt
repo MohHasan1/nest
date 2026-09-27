@@ -1,0 +1,16 @@
+https://nodejs.org/en/download
+node --version
+npm --version
+
+npm i -g @nestjs/cli
+nest --version
+
+nest start --watch
+pnpm start:dev
+
+nest add class-validator
+nest add class-transformer
+
+nest generate module messages
+nest generate controller messages/messages --flat
+nest generate service messages/messages --flat
