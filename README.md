@@ -10,7 +10,7 @@ folders will be added as new NestJS concepts are explored.
 
 | Folder | Purpose |
 | --- | --- |
-| `nest-intro/` | Introductory NestJS exercises (coming soon) |
+| `nest-basics/` | Introductory NestJS messages API |
 
 ## Working with a project
 
@@ -18,9 +18,9 @@ Open the folder for the exercise you want to run, install its dependencies, and
 use the scripts defined in that project's `package.json`:
 
 ```bash
-cd nest-intro
-npm install
-npm run start:dev
+cd nest-basics
+pnpm install
+pnpm start:dev
 ```
 
 Commands may differ between projects, so check the local `package.json` and
@@ -38,5 +38,4 @@ README when they are available.
 ## Requirements
 
 - A current Node.js LTS release
-- npm (or the package manager specified by an individual project)
-
+- pnpm
