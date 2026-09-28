@@ -11,6 +11,7 @@ folders will be added as new NestJS concepts are explored.
 | Folder | Purpose |
 | --- | --- |
 | `nest-basics/` | Introductory NestJS messages API |
+| `nest-modules/` | NestJS modules and dependency-injection exercises |
 
 ## Working with a project
 

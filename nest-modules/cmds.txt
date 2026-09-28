@@ -1,0 +1,3 @@
+nest g module computer
+nest g service computer
+nest g controller computer
