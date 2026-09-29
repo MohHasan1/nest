@@ -12,6 +12,7 @@ folders will be added as new NestJS concepts are explored.
 | --- | --- |
 | `nest-basics/` | Introductory NestJS messages API |
 | `nest-modules/` | NestJS modules and dependency-injection exercises |
+| `car-price/` | Users and reports API with TypeORM (SQLite), validation, and response serialization |
 
 ## Working with a project
 
