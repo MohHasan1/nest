@@ -1,8 +1,31 @@
+### Create a user
 POST http://localhost:3000/users/sign-up
 Content-Type: application/json
 
 {
     "email": "aa@gmail.com",
     "password": "asxdsa",
-    "hasan": "tawhid"
+    "name": "hasan"
+} 
+
+### all users
+GET http://localhost:3000/users
+
+### A user
+GET http://localhost:3000/users/2
+
+### A user by email
+GET http://localhost:3000/users?email=aa@gmail.com
+
+### A user by email
+DELETE http://localhost:3000/users/1
+
+### update a user
+PATCH http://localhost:3000/users/2
+Content-Type: application/json
+
+{
+    "email": "hasan@gmail.com",
+    "password": "hasan",
+    "name,": "hasan"
 } 
