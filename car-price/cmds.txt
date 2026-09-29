@@ -1,0 +1,12 @@
+nest g s <name> --no-spec
+nest g co <name> --no-spec
+nest g mo >name> --no-spec
+
+nest g resource --no-spec
+
+nest-cli options
+{
+  "generateOptions": {
+    "spec": false
+  }
+}
