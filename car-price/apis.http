@@ -18,7 +18,7 @@ Content-Type: application/json
     "password": "secure_pass"
 } 
 
-### all users
+### All users
 GET http://localhost:3000/users
 
 ### A user
@@ -39,3 +39,21 @@ Content-Type: application/json
     "password": "hasan",
     "name,": "hasan"
 } 
+
+### Me
+GET http://localhost:3000/users/me
+
+### Whoami
+GET http://localhost:3000/users/whoami
+
+### sign out
+POST  http://localhost:3000/users/sign-out
+
+### Test cookie to set - serializer might remove fields so uncomment
+GET http://localhost:3000/users/set-cookie/hasan
+
+### Test cookie to get value - serializer might remove fields so uncomment
+GET http://localhost:3000/users/get-cookie
+
+### Test cookie to get specific cookie value - serializer might remove fields so uncomment
+GET http://localhost:3000/users/get-cookie?value=userId

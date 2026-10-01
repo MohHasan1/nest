@@ -1,6 +1,5 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -9,7 +8,8 @@ import {
   Patch,
   Post,
   Query,
-  UseInterceptors,
+  Session,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto.js';
 import { UsersService } from './users.service.js';
@@ -17,8 +17,13 @@ import { updateUserDto } from './dtos/update-user.dto.js';
 import { Serialize } from '../interceptors/serialize.interceptors.js';
 import { UserDto } from './dtos/user.dto.js';
 import { AuthService } from './auth.service.js';
+import { CurrentUserInterceptor } from './interceptors/current-user.interceptor.js';
+import { CurrentUser } from './decorators/current-user.decorator.js';
+import { User } from './user.entity.js';
+import { AuthGuard } from '../guards/auth.guard.js';
 
 @Controller('users')
+// @UseInterceptors(CurrentUserInterceptor)
 @Serialize(UserDto) // opt 2.1 custom serializer decor
 // @UseInterceptors(ClassSerializerInterceptor) // opt 1 serializer
 // @UseInterceptors(new SerializeInterceptor(UserDto)) // opt 2.0 custom serializer
@@ -28,14 +33,57 @@ export class UsersController {
     private authService: AuthService,
   ) {}
 
+  // Test cookies
+  @Get('/set-cookie/:value')
+  setCookieValue(@Param('value') value: string, @Session() session: any) {
+    console.log(value, session);
+    session.value = value;
+    return 'value set';
+  }
+
+  @Get('/get-cookie')
+  getCookieValue(@Query('value') value: string, @Session() session: any) {
+    if (value) return { value: session[value] };
+
+    return { value: session.value };
+  }
+  // End Test cookies
+
   @Post('/sign-up')
-  createUser(@Body() body: CreateUserDto) {
-    return this.authService.signup(body.email, body.password);
+  async createUser(@Body() body: CreateUserDto, @Session() session: any) {
+    const user = await this.authService.signup(body.email, body.password);
+
+    session.userId = user.id;
+    return user;
   }
 
   @Post('/sign-in')
-  signinUser(@Body() body: CreateUserDto) {
-    return this.authService.signin(body.email, body.password);
+  async signinUser(@Body() body: CreateUserDto, @Session() session: any) {
+    const user = await this.authService.signin(body.email, body.password);
+
+    session.userId = user.id;
+    return user;
+  }
+
+  @Get('/whoami')
+  @UseGuards(AuthGuard)
+  async whoami(@CurrentUser() user: User) {
+    if (!user) throw new NotFoundException('User not found');
+
+    return user;
+  }
+
+  @Get('/me')
+  async me(@Session() session: any) {
+    const user = this.userService.findOne(session.userId);
+    if (!user) throw new NotFoundException('User not found');
+
+    return user;
+  }
+
+  @Post('sign-out')
+  async signoutUser(@Session() session: any) {
+    session.userId = null;
   }
 
   @Get('/:id')
