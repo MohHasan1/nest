@@ -1,0 +1,45 @@
+### Sign in first (sets the session cookie needed by AuthGuard)
+POST http://localhost:3000/users/sign-in
+Content-Type: application/json
+
+{
+    "email": "hasan@gmail.com",
+    "password": "secure_pass"
+}
+
+### Create a report
+POST http://localhost:3000/reports
+Content-Type: application/json
+
+{
+    "make": "toyota",
+    "model": "corolla",
+    "year": 2018,
+    "mileage": 50000,
+    "lng": -79.3832,
+    "lat": 43.6532,
+    "price": 15000
+}
+
+### Create a report - wrong types (expect 400)
+POST http://localhost:3000/reports
+Content-Type: application/json
+
+{
+    "make": 123,
+    "model": true,
+    "year": "2018",
+    "mileage": "lots",
+    "lng": 500,
+    "lat": -100,
+    "price": -15000
+}
+
+### Create a report - missing fields (expect 400)
+POST http://localhost:3000/reports
+Content-Type: application/json
+
+{
+    "make": "toyota",
+    "price": 15000
+}

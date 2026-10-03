@@ -57,3 +57,6 @@ GET http://localhost:3000/users/get-cookie
 
 ### Test cookie to get specific cookie value - serializer might remove fields so uncomment
 GET http://localhost:3000/users/get-cookie?value=userId
+
+
+###
