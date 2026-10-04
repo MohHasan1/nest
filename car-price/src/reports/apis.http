@@ -75,3 +75,12 @@ Content-Type: application/json
 {
     "isApproved": true
 }
+
+### Get an estimate
+GET http://localhost:3000/reports?make=toyota&model=corolla&year=2018&mileage=50000&lng=-79.3832&lat=43.6532
+
+### Get an estimate - wrong types (expect 400)
+GET http://localhost:3000/reports?make=toyota&model=corolla&year=old&mileage=lots&lng=500&lat=-100
+
+### Get an estimate - missing fields (expect 400)
+GET http://localhost:3000/reports?make=toyota

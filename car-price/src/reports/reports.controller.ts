@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { CreateReportDto } from './dtos/create-report.dto.js';
@@ -16,6 +17,7 @@ import { Serialize } from '../interceptors/serialize.interceptors.js';
 import { ReportDto } from './dtos/Report.dto.js';
 import { ApproveReportDto } from './dtos/approve-report.dto.js';
 import { AdminGuard } from '../guards/admin.guard.js';
+import { GetEstimateDto } from './dtos/get-estimate.dto.js';
 
 @Controller('reports')
 @Serialize(ReportDto)
@@ -23,7 +25,9 @@ export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
   @Get()
-  getReport() {}
+  getEstimateReport(@Query() query: GetEstimateDto) {
+    return query;
+  }
 
   @Post()
   @UseGuards(AuthGuard)
