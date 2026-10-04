@@ -16,8 +16,7 @@ export class CurrentUserInterceptor implements NestInterceptor {
     next: CallHandler<any>,
   ): Observable<any> | Promise<Observable<any>> {
     const req = context.switchToHttp().getRequest();
-    const userId = req.session.userId || null;
-
+    const userId = req.session.userId || null; // is decrypted and injected into req by nest and cookie-session (middlewares - as middleware runs before interceptors)
     if (!userId) return next.handle();
 
     const user = this.userService.findOne(userId);
