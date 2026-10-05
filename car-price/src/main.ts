@@ -9,7 +9,7 @@ async function bootstrap() {
 
   app.use(cookieSession({ keys: ['secure_random_cookie'] })); // decodes the cookie to gives us the session object,
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
-
+ 
   await app.listen(process.env.PORT ?? 3000);
 }
 await bootstrap();

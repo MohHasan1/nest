@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseArrayPipe,
   Patch,
   Post,
   Query,
@@ -25,8 +26,12 @@ export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
   @Get()
-  getEstimateReport(@Query() query: GetEstimateDto) {
-    return query;
+  async getEstimateReport(@Query() query: GetEstimateDto) {
+    const estPrice = await this.reportsService.createEstimate(query);
+    return {
+      ...query,
+      price: estPrice.price,
+    };
   }
 
   @Post()
@@ -39,5 +44,16 @@ export class ReportsController {
   @UseGuards(AdminGuard)
   approveReport(@Body() body: ApproveReportDto, @Param('id') id: number) {
     return this.reportsService.changeApproval(id, body.isApproved);
+  }
+
+  @Post('/bulk')
+  @UseGuards(AdminGuard)
+  createBulk(
+    @Body(new ParseArrayPipe({ items: CreateReportDto, whitelist: true }))
+    body: CreateReportDto[],
+    @CurrentUser()
+    user: User,
+  ) {
+    return this.reportsService.createBulk(body, user);
   }
 }

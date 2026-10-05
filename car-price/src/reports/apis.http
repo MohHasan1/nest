@@ -84,3 +84,57 @@ GET http://localhost:3000/reports?make=toyota&model=corolla&year=old&mileage=lot
 
 ### Get an estimate - missing fields (expect 400)
 GET http://localhost:3000/reports?make=toyota
+
+### Bulk create reports - seed data for testing estimates (sign in first, admin only)
+POST http://localhost:3000/reports/bulk
+Content-Type: application/json
+
+[
+    { "make": "toyota", "model": "corolla", "year": 2018, "mileage": 40000,  "lng": -79.38,  "lat": 43.65, "price": 16000 },
+    { "make": "toyota", "model": "corolla", "year": 2018, "mileage": 50000,  "lng": -79.40,  "lat": 43.70, "price": 15000 },
+    { "make": "toyota", "model": "corolla", "year": 2017, "mileage": 60000,  "lng": -79.35,  "lat": 43.60, "price": 14000 },
+    { "make": "toyota", "model": "corolla", "year": 2018, "mileage": 150000, "lng": -79.38,  "lat": 43.65, "price": 10000 },
+    { "make": "toyota", "model": "camry",   "year": 2019, "mileage": 45000,  "lng": -79.38,  "lat": 43.65, "price": 22000 },
+    { "make": "toyota", "model": "corolla", "year": 2010, "mileage": 180000, "lng": -79.38,  "lat": 43.65, "price": 6000 },
+    { "make": "toyota", "model": "corolla", "year": 2018, "mileage": 50000,  "lng": -123.12, "lat": 49.28, "price": 17000 },
+    { "make": "honda",  "model": "civic",   "year": 2018, "mileage": 45000,  "lng": -79.38,  "lat": 43.65, "price": 16500 },
+    { "make": "honda",  "model": "civic",   "year": 2019, "mileage": 55000,  "lng": -79.42,  "lat": 43.68, "price": 15500 },
+    { "make": "honda",  "model": "accord",  "year": 2017, "mileage": 70000,  "lng": -79.38,  "lat": 43.65, "price": 21000 },
+    { "make": "ford",   "model": "f150",    "year": 2020, "mileage": 30000,  "lng": -79.38,  "lat": 43.65, "price": 35000 }
+]
+
+### Bulk create - one bad item (expect 400, nothing saved)
+POST http://localhost:3000/reports/bulk
+Content-Type: application/json
+
+[
+    { "make": "toyota", "model": "corolla", "year": 2018, "mileage": 40000, "lng": -79.38, "lat": 43.65, "price": 16000 },
+    { "make": "honda",  "model": "civic",   "year": "2018", "mileage": -5,  "lng": 500,    "lat": 43.65, "price": 16500 }
+]
+
+### Bulk create - not an array (expect 400)
+POST http://localhost:3000/reports/bulk
+Content-Type: application/json
+
+{ "make": "toyota", "model": "corolla", "year": 2018, "mileage": 40000, "lng": -79.38, "lat": 43.65, "price": 16000 }
+
+### Estimate - toyota corolla, Toronto, 2018
+GET http://localhost:3000/reports?make=toyota&model=corolla&year=2018&mileage=50000&lng=-79.38&lat=43.65
+
+### Estimate - toyota camry, Toronto, 2018 (different model, same make)
+GET http://localhost:3000/reports?make=toyota&model=camry&year=2018&mileage=50000&lng=-79.38&lat=43.65
+
+### Estimate - honda civic, Toronto, 2018 (different make)
+GET http://localhost:3000/reports?make=honda&model=civic&year=2018&mileage=50000&lng=-79.38&lat=43.65
+
+### Estimate - ford f150, Toronto, 2020 (only one match)
+GET http://localhost:3000/reports?make=ford&model=f150&year=2020&mileage=30000&lng=-79.38&lat=43.65
+
+### Estimate - toyota corolla, Vancouver (different location, should only use the Vancouver report)
+GET http://localhost:3000/reports?make=toyota&model=corolla&year=2018&mileage=50000&lng=-123.12&lat=49.28
+
+### Estimate - toyota corolla, Toronto, 2010 (old year, should only use the 2010 report)
+GET http://localhost:3000/reports?make=toyota&model=corolla&year=2010&mileage=180000&lng=-79.38&lat=43.65
+
+### Estimate - no matching make (expect price null)
+GET http://localhost:3000/reports?make=bmw&model=x5&year=2018&mileage=50000&lng=-79.38&lat=43.65
