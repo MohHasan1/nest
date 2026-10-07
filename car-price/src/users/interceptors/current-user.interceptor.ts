@@ -7,19 +7,20 @@ import {
 import { Observable } from 'rxjs';
 import { UsersService } from '../users.service.js';
 
+// not in use we use interceptor to get the current user
 @Injectable()
 export class CurrentUserInterceptor implements NestInterceptor {
   constructor(private readonly userService: UsersService) {}
 
-  intercept(
+  async intercept(
     context: ExecutionContext,
     next: CallHandler<any>,
-  ): Observable<any> | Promise<Observable<any>> {
+  ): Promise<Observable<any>> {
     const req = context.switchToHttp().getRequest();
     const userId = req.session.userId || null; // is decrypted and injected into req by nest and cookie-session (middlewares - as middleware runs before interceptors)
     if (!userId) return next.handle();
 
-    const user = this.userService.findOne(userId);
+    const user = await this.userService.findOne(userId);
     req.currentUser = user;
 
     return next.handle();
