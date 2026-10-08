@@ -7,10 +7,10 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 describe('AuthService', () => {
   let service: AuthService;
   let mockUserService: Partial<UsersService>;
-  const users: User[] = [];
+  const users: User[] = []; // In-memory db
 
   beforeEach(async () => {
-    // fake user service
+    // Mock User service
     mockUserService = {
       find: (email: string) => {
         const filteredUser = users.find((u) => u.email === email);
@@ -29,6 +29,7 @@ describe('AuthService', () => {
       },
     };
 
+    // DI
     const module = await Test.createTestingModule({
       providers: [
         AuthService,

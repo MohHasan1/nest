@@ -94,8 +94,8 @@ export class UsersController {
     return user;
   }
 
-  @Get()
-  async find(@Query('email') email: string) {
+  @Get() // all and query
+  async find(@Query('email') email?: string) {
     if (!email) return this.userService.findAll();
 
     const user = await this.userService.find(email);
