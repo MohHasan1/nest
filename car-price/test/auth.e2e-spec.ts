@@ -4,7 +4,7 @@ import request from 'supertest';
 import { App } from 'supertest/types.js';
 import { AppModule } from './../src/app.module.js';
 
-describe('AppController (e2e)', () => {
+describe('Auth (e2e)', () => {
   let app: INestApplication<App>;
 
   beforeEach(async () => {
@@ -16,11 +16,19 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('/signup (POST)', async () => {
     return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+      .post('/users/sign-up')
+      .send({
+        email: 'test@gmail.com',
+        password: '123',
+      })
+      .expect(201)
+      .then((res) => {
+        const { id, email } = res.body;
+        expect(id).toBeDefined();
+        expect(email).toEqual('test@gmail.com');
+      });
   });
 
   afterEach(async () => {
