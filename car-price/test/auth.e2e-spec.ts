@@ -31,6 +31,25 @@ describe('Auth (e2e)', () => {
       });
   });
 
+  it('signup and then signin', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/users/sign-up')
+      .send({
+        email: 'test@gmail.com',
+        password: '123',
+      })
+      .expect(201);
+
+    const cookie = res.get('Set-Cookie');
+
+    const { body } = await request(app.getHttpServer())
+      .get('/users/me')
+      .set('Cookie', cookie!)
+      .expect(200);
+
+    expect(body.email).toEqual('test@gmail.com');
+  });
+
   afterEach(async () => {
     await app.close();
   });
